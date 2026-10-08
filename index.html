@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML LAB - Blog Saya (Form 1 AMANAH)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#095186',
+                        },
+                        codebg: '#1e1e2e',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .code-scrollbar::-webkit-scrollbar-track { background: #181825; }
+        .code-scrollbar::-webkit-scrollbar-thumb { background: #45475a; }
+
+        .browser-mockup {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .badge-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        }
+        
+        .pulse-subtle {
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(2, 132, 199, 0.4); }
+            50% { border-color: rgba(2, 132, 199, 1); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+
+    <!-- MOBILE TOP BAR -->
+    <div class="md:hidden bg-slate-900 text-white p-4 flex items-center justify-between sticky top-0 z-50 shadow-md">
+        <div class="flex items-center space-x-2">
+            <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-white p-2 rounded-lg font-bold text-lg">
+                <i class="fa-solid font-mono fa-code"></i>
+            </div>
+            <span class="font-bold text-lg tracking-tight">HTML LAB</span>
+        </div>
+        <button id="mobileMenuBtn" class="p-2 text-slate-300 hover:text-white focus:outline-none">
+            <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out flex flex-col justify-between shadow-2xl md:static md:shadow-none">
+        <div>
+            <!-- Logo Section -->
+            <div class="p-5 border-b border-slate-800 flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-white p-2.5 rounded-xl shadow-lg shadow-cyan-500/20 font-bold text-xl">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-white text-lg tracking-wide leading-none">HTML LAB</h1>
+                    <span class="text-xs text-cyan-400 font-medium">Form 1 ASK • Bab 4.2</span>
+                </div>
+            </div>
+
+            <!-- Student Profile Badge -->
+            <div class="p-4 mx-3 my-3 bg-slate-800/60 rounded-xl border border-slate-700/50 flex items-center justify-between">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-9 h-9 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm border border-cyan-500/30">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div class="truncate">
+                        <div id="sidebarStudentName" class="text-sm font-semibold text-white truncate">Pelajar ASK</div>
+                        <div id="sidebarLevel" class="text-xs text-amber-400 font-medium">HTML Beginner</div>
+                    </div>
+                </div>
+                <button onclick="changeStudentName()" title="Tukar Nama" class="text-slate-400 hover:text-white text-xs p-1">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="px-5 py-2">
+                <div class="flex justify-between items-center text-xs text-slate-400 mb-1.5 font-medium">
+                    <span>Kemajuan Misi</span>
+                    <span id="missionProgressText" class="text-cyan-400 font-bold">0/10 Misi</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden p-0.5 border border-slate-700">
+                    <div id="missionProgressBar" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Nav Links -->
+            <nav class="mt-4 px-3 space-y-1">
+                <button onclick="navigateTo('home')" id="nav-home" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors bg-cyan-600 text-white shadow-md shadow-cyan-900/30">
+                    <i class="fa-solid fa-house w-5 text-center"></i>
+                    <span>Mula</span>
+                </button>
+
+                <button onclick="navigateTo('learn')" id="nav-learn" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-book-open w-5 text-center"></i>
+                    <span>Belajar HTML</span>
+                </button>
+
+                <button onclick="navigateTo('playground')" id="nav-playground" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-laptop-code w-5 text-center"></i>
+                    <span>HTML Playground</span>
+                </button>
+
+                <button onclick="navigateTo('camera')" id="nav-camera" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-camera w-5 text-center"></i>
+                    <span>Camera Studio</span>
+                </button>
+
+                <button onclick="navigateTo('missions')" id="nav-missions" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-bullseye w-5 text-center"></i>
+                    <span>Misi HTML</span>
+                    <span id="missionBadgeCount" class="ml-auto bg-cyan-500/20 text-cyan-300 text-xs px-2 py-0.5 rounded-full font-semibold">0/10</span>
+                </button>
+
+                <button onclick="navigateTo('error-hunter')" id="nav-error-hunter" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-bug w-5 text-center"></i>
+                    <span>Pemburu Ralat</span>
+                </button>
+
+                <button onclick="navigateTo('blog')" id="nav-blog" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-blog w-5 text-center"></i>
+                    <span>Blog Saya</span>
+                </button>
+
+                <button onclick="navigateTo('achievements')" id="nav-achievements" class="nav-item w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors">
+                    <i class="fa-solid fa-trophy w-5 text-center"></i>
+                    <span>Pencapaian & Rubrik</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="p-4 border-t border-slate-800 text-center text-xs text-slate-500">
+            <p>Kurikulum ASK Tingkatan 1</p>
+            <p class="mt-0.5 font-medium text-slate-400">Modul Kod HTML Interaktif</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen">
+
+        <!-- 1. HOME VIEW (MULA) -->
+        <section id="view-home" class="app-view p-4 sm:p-8 max-w-6xl mx-auto w-full space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 shadow-xl border border-slate-800">
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute right-1/3 top-0 w-60 h-60 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-2xl space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1.5 rounded-full text-cyan-300 text-xs sm:text-sm font-semibold tracking-wide">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Asas Sains Komputer • Tingkatan 1</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                        SELAMAT DATANG KE <br>
+                        <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">HTML LAB</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                        Bina blog anda sendiri dengan kod HTML secara hands-on! Pelajari sintaks, ambil gambar profil anda, selesaikan 10 misi pembelajaran, dan terbitkan laman <span class="text-cyan-300 font-semibold">BLOG SAYA</span>.
+                    </p>
+
+                    <div class="pt-2 flex flex-wrap gap-4 items-center">
+                        <button onclick="navigateTo('learn')" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5 flex items-center space-x-3 text-base">
+                            <span>MULA BELAJAR</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                        <button onclick="navigateTo('playground')" class="bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-6 py-4 rounded-xl transition-all flex items-center space-x-2 text-base">
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                            <span>Buka Playground</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Name Setup Card -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-2xl font-bold flex-shrink-0">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">Profil Murid</h3>
+                        <p class="text-sm text-slate-500">Masukkan nama anda untuk menyimpan markah dan sijil pencapaian.</p>
+                    </div>
+                </div>
+                <div class="flex w-full md:w-auto items-center space-x-2">
+                    <input type="text" id="homeStudentNameInput" placeholder="Masukkan Nama Anda..." class="w-full md:w-64 px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none text-sm font-medium">
+                    <button onclick="saveStudentNameFromHome()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex-shrink-0">
+                        Simpan
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3 Simple Steps -->
+            <div>
+                <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-route text-cyan-600"></i>
+                    <span>Langkah Pembelajaran Anda</span>
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 relative hover:border-cyan-300 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 font-bold text-lg flex items-center justify-center">
+                            ①
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg">Belajar & Faham</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Pelajari topik HTML Bab 4.2 seperti struktur asas, tag perenggan, tajuk, pautan, imej, dan ruang komen.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 relative hover:border-cyan-300 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 font-bold text-lg flex items-center justify-center">
+                            ②
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg">Tulis Kod & Misi</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Menaip kod HTML sendiri, mengambil gambar profil webcam, dan menewaskan 10 misi kemahiran.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 relative hover:border-cyan-300 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 font-bold text-lg flex items-center justify-center">
+                            ③
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg">Bina & Terbit Blog</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Gabungkan semua sintaks HTML dalam projek akhir <span class="font-semibold text-emerald-700">BLOG SAYA</span> dan dapatkan penilaian gred!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Project Preview Banner -->
+            <div class="bg-gradient-to-r from-cyan-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+                <div class="space-y-2">
+                    <span class="text-cyan-300 text-xs font-bold uppercase tracking-wider">Matlamat Pembelajaran</span>
+                    <h3 class="text-2xl font-bold">Projek Akhir: BLOG SAYA</h3>
+                    <p class="text-slate-300 text-sm max-w-xl">
+                        Di penghujung lab ini, anda akan hasilkan satu laman blog interaktif lengkap dengan tajuk, foto profil peribadi, pautan kegemaran, menu hobi, dan borang komen visitors!
+                    </p>
+                </div>
+                <button onclick="navigateTo('blog')" class="bg-white text-slate-900 hover:bg-slate-100 font-bold px-6 py-3 rounded-xl transition-colors shadow flex items-center space-x-2 text-sm flex-shrink-0">
+                    <i class="fa-solid fa-eye text-cyan-600"></i>
+                    <span>Lihat Ruang Blog</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. BELAJAR HTML VIEW -->
+        <section id="view-learn" class="app-view hidden p-4 sm:p-8 max-w-6xl mx-auto w-full space-y-8">
+            <div class="border-b border-slate-200 pb-5">
+                <div class="inline-flex items-center space-x-2 text-cyan-600 text-xs font-bold uppercase tracking-wider mb-1">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Bab 4.2 Asas Sains Komputer</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Nota Interaktif HTML</h1>
+                <p class="text-slate-500 text-sm mt-1">Fahami konsep tag HTML sebelum memulakan cabaran misi menaip kod.</p>
+            </div>
+
+            <!-- Topics Grid -->
+            <div id="topicsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Topics will be rendered dynamically by JavaScript -->
+            </div>
+        </section>
+
+        <!-- 3. HTML PLAYGROUND VIEW -->
+        <section id="view-playground" class="app-view hidden p-4 sm:p-6 max-w-7xl mx-auto w-full flex-1 flex flex-col space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-laptop-code text-cyan-600"></i>
+                        <span>HTML Playground</span>
+                    </h1>
+                    <p class="text-xs text-slate-500">Taip kod HTML anda sendiri dan lihat hasil secara langsung.</p>
+                </div>
+
+                <div class="flex items-center space-x-2 flex-wrap gap-2">
+                    <button onclick="runPlaygroundCode()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-lg text-sm shadow transition-colors flex items-center space-x-1.5">
+                        <i class="fa-solid fa-play text-xs"></i>
+                        <span>▶ RUN</span>
+                    </button>
+
+                    <button onclick="resetPlaygroundCode()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1.5">
+                        <i class="fa-solid fa-rotate-left text-xs"></i>
+                        <span>↺ RESET</span>
+                    </button>
+
+                    <button onclick="showPlaygroundHint()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1.5">
+                        <i class="fa-solid fa-lightbulb text-xs"></i>
+                        <span>💡 HINT</span>
+                    </button>
+
+                    <button onclick="clearPlaygroundCode()" class="bg-rose-600 hover:bg-rose-500 text-white font-semibold px-3 py-2 rounded-lg text-sm transition-colors flex items-center space-x-1.5">
+                        <i class="fa-solid fa-trash text-xs"></i>
+                        <span>🗑 CLEAR</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Code & Preview Split View -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 min-h-[500px]">
+                <!-- LEFT: HTML Editor -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                    <div class="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                        <span class="text-xs font-mono font-semibold text-cyan-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-code"></i>
+                            <span>HTML CODE</span>
+                        </span>
+                        <span class="text-xs text-slate-500 font-mono">index.html</span>
+                    </div>
+                    <div class="relative flex-1 flex">
+                        <textarea id="playgroundTextarea" spellcheck="false" class="w-full h-full bg-slate-900 text-emerald-400 font-mono text-sm p-4 outline-none resize-none code-scrollbar leading-relaxed" placeholder="<!-- Taip kod HTML anda di sini -->"></textarea>
+                    </div>
+                    <div id="playgroundStatus" class="bg-slate-950 px-4 py-2 text-xs font-mono border-t border-slate-800 text-slate-400 flex items-center justify-between">
+                        <span id="playgroundStatusText">✓ Sedia untuk dijalankan</span>
+                        <span class="text-slate-600">UTF-8</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Live Preview Frame -->
+                <div class="bg-white rounded-xl border border-slate-300 overflow-hidden flex flex-col shadow-lg">
+                    <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-300 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex space-x-1.5">
+                                <div class="w-3 h-3 rounded-full bg-rose-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-600 ml-2">LIVE PREVIEW</span>
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">http://localhost/blog</span>
+                    </div>
+                    <iframe id="playgroundIframe" class="w-full flex-1 bg-white border-0" sandbox="allow-same-origin"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CAMERA STUDIO VIEW -->
+        <section id="view-camera" class="app-view hidden p-4 sm:p-8 max-w-5xl mx-auto w-full space-y-6">
+            <div class="border-b border-slate-200 pb-5">
+                <div class="inline-flex items-center space-x-2 text-cyan-600 text-xs font-bold uppercase tracking-wider mb-1">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Bahan Imej Blog</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">📷 Camera Studio</h1>
+                <p class="text-slate-500 text-sm mt-1">Ambil gambar profil anda menggunakan kamera peranti untuk digunakan dalam HTML.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Camera / Preview Box -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-webcam text-cyan-600"></i>
+                        <span>AMBIL GAMBAR ANDA</span>
+                    </h3>
+
+                    <div class="relative w-full aspect-square sm:aspect-video bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border-2 border-slate-700">
+                        <video id="webcamVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+                        <canvas id="webcamCanvas" class="hidden"></canvas>
+                        <img id="photoCapturedResult" class="hidden w-full h-full object-cover" alt="Gambar Profil">
+
+                        <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-4 text-center">
+                            <i class="fa-solid fa-video-slash text-4xl mb-2"></i>
+                            <p class="text-sm font-medium">Kamera belum dihidupkan</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3">
+                        <button id="startCamBtn" onclick="startWebcam()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-xl shadow transition-colors flex items-center justify-center space-x-2 text-sm">
+                            <i class="fa-solid fa-power-off"></i>
+                            <span>Hidupkan Kamera</span>
+                        </button>
+
+                        <button id="snapCamBtn" onclick="takeSnapshot()" disabled class="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl shadow transition-colors flex items-center justify-center space-x-2 text-sm">
+                            <i class="fa-solid fa-camera-retro"></i>
+                            <span>📸 SNAP</span>
+                        </button>
+                    </div>
+
+                    <div id="capturedActions" class="hidden space-y-3 pt-2">
+                        <div class="flex gap-3">
+                            <button onclick="retakeSnapshot()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2.5 px-4 rounded-xl transition-colors text-sm flex items-center justify-center space-x-1.5">
+                                <i class="fa-solid fa-rotate-left"></i>
+                                <span>Ambil Semula</span>
+                            </button>
+
+                            <button onclick="useSnapshotInLab()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl transition-colors shadow text-sm flex items-center justify-center space-x-1.5">
+                                <i class="fa-solid fa-check"></i>
+                                <span>Gunakan Gambar</span>
+                            </button>
+                        </div>
+
+                        <a id="downloadPhotoLink" download="gambar-saya.jpg" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 px-4 rounded-xl transition-colors shadow flex items-center justify-center space-x-2 text-sm">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Muat Turun gambar-saya.jpg</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Explanation & HTML Instructions -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl shadow-md space-y-5 border border-slate-700">
+                    <div class="flex items-center space-x-3 text-amber-400 font-bold text-lg border-b border-slate-700 pb-3">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Arahan Penggunaan Gambar</span>
+                    </div>
+
+                    <div class="space-y-3 text-sm text-slate-300 leading-relaxed">
+                        <p class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                            <strong>Langkah 1:</strong> Selepas mengambil gambar, klik butang <strong class="text-amber-400">"Muat Turun gambar-saya.jpg"</strong>.
+                        </p>
+                        <p class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                            <strong>Langkah 2:</strong> Pastikan fail <code class="text-cyan-300 font-mono font-bold">gambar-saya.jpg</code> diletakkan dalam folder yang sama dengan fail HTML anda semasa di bilik makmal komputer.
+                        </p>
+                        <p class="bg-slate-800/80 p-3.5 rounded-xl border border-slate-700">
+                            <strong>Langkah 3:</strong> Dalam kod HTML anda, guna tag <code class="text-emerald-300 font-mono font-bold">&lt;img&gt;</code> berikut:
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-emerald-400 text-sm select-all">
+                        &lt;img src="gambar-saya.jpg" alt="Gambar Saya" width="200"&gt;
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-cyan-900/30 border border-cyan-500/30 text-cyan-200 text-xs">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1 text-cyan-400"></i>
+                        <strong>Sistem Automatik Lab:</strong> Sebaik sahaja anda menaip <code class="font-mono font-bold text-white">&lt;img src="gambar-saya.jpg"&gt;</code> di Playground atau Misi, foto webcam yang anda ambil akan muncul secara automatik pada ruang Live Preview!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. HTML MISSIONS VIEW -->
+        <section id="view-missions" class="app-view hidden p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6">
+            <div class="border-b border-slate-200 pb-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center space-x-2 text-cyan-600 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-bullseye"></i>
+                        <span>Modul Latihan ASK</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">🎯 Misi HTML</h1>
+                    <p class="text-slate-500 text-sm mt-1">Selesaikan 10 misi membina komponen HTML untuk mengumpul lencana.</p>
+                </div>
+
+                <!-- Mission Selector Pills -->
+                <div id="missionSelectorContainer" class="flex flex-wrap gap-2">
+                    <!-- Pills generated by JS -->
+                </div>
+            </div>
+
+            <!-- Active Mission Container -->
+            <div id="activeMissionBox" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col space-y-0">
+                <!-- Mission Header -->
+                <div class="bg-slate-900 text-white p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800">
+                    <div>
+                        <span id="missionBadgeTag" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-500 text-slate-950 mb-1">MISI 1</span>
+                        <h2 id="missionTitleText" class="text-xl font-bold">Struktur Blog</h2>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="checkCurrentMission()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl shadow text-sm transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>SEMAK KOD</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Instruction Box -->
+                <div class="p-5 bg-slate-50 border-b border-slate-200 space-y-2">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Arahan Misi:</h4>
+                    <p id="missionInstructionText" class="text-slate-800 font-medium text-sm sm:text-base"></p>
+
+                    <div id="missionRequirementsTagBox" class="flex flex-wrap gap-2 pt-2">
+                        <!-- Required tags list -->
+                    </div>
+                </div>
+
+                <!-- Workspace: Editor + Live Preview -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[420px]">
+                    <!-- Editor -->
+                    <div class="bg-slate-900 border-r border-slate-800 flex flex-col">
+                        <div class="bg-slate-950 px-4 py-2 text-xs font-mono text-cyan-400 flex items-center justify-between">
+                            <span>HTML CODE (Taip di sini)</span>
+                            <button onclick="insertMissionTemplate()" class="text-slate-400 hover:text-white text-xs underline">Muat Rangka</button>
+                        </div>
+                        <textarea id="missionCodeTextarea" spellcheck="false" class="w-full flex-1 bg-slate-900 text-emerald-400 font-mono text-sm p-4 outline-none resize-none code-scrollbar leading-relaxed" placeholder="Taip kod HTML anda di sini..."></textarea>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="bg-white flex flex-col">
+                        <div class="bg-slate-100 px-4 py-2 border-b border-slate-200 text-xs font-semibold text-slate-600">
+                            LIVE PREVIEW OUTPUT
+                        </div>
+                        <iframe id="missionIframe" class="w-full flex-1 bg-white border-0" sandbox="allow-same-origin"></iframe>
+                    </div>
+                </div>
+
+                <!-- Feedback & Hint Bar -->
+                <div class="p-4 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div id="missionFeedbackText" class="text-sm text-slate-300 font-mono flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                        <span>Taip kod di atas dan klik "SEMAK KOD" untuk menguji.</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="getMissionHint()" class="bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors">
+                            💡 Hint
+                        </button>
+                        <button onclick="revealMissionAnswer()" class="bg-slate-800 text-slate-400 hover:text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors">
+                            Lihat Jawapan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ERROR HUNTER VIEW -->
+        <section id="view-error-hunter" class="app-view hidden p-4 sm:p-8 max-w-6xl mx-auto w-full space-y-6">
+            <div class="border-b border-slate-200 pb-5">
+                <div class="inline-flex items-center space-x-2 text-rose-600 text-xs font-bold uppercase tracking-wider mb-1">
+                    <i class="fa-solid fa-bug"></i>
+                    <span>Kemahiran Mengesan Ralat (ASK 4.2.9)</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">🔎 Pemburu Ralat HTML</h1>
+                <p class="text-slate-500 text-sm mt-1">Cari dan baiki tag HTML yang rosak. Jangan biarkan sebarang ralat sintaks!</p>
+            </div>
+
+            <!-- Error Challenge Cards Container -->
+            <div id="errorChallengesContainer" class="space-y-6">
+                <!-- Dynamic cards loaded by JS -->
+            </div>
+        </section>
+
+        <!-- 7. BLOG SAYA & STORYBOARD VIEW -->
+        <section id="view-blog" class="app-view hidden p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-8">
+            <div class="border-b border-slate-200 pb-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center space-x-2 text-emerald-600 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-blog"></i>
+                        <span>Projek Akhir HTML</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">📝 Laman Blog Saya</h1>
+                    <p class="text-slate-500 text-sm mt-1">Lakar papan cerita dan bina blog interaktif peribadi anda sepenuhnya!</p>
+                </div>
+
+                <!-- Section Switcher -->
+                <div class="flex bg-slate-200 p-1 rounded-xl">
+                    <button id="tabStoryboardBtn" onclick="switchBlogTab('storyboard')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-700 bg-white shadow transition-all">
+                        1. Papan Cerita
+                    </button>
+                    <button id="tabBlogBuilderBtn" onclick="switchBlogTab('builder')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-600 hover:text-slate-900 transition-all">
+                        2. Editor Blog
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 1: STORYBOARD (PAPAN CERITA ASK 4.2.1) -->
+            <div id="storyboardSection" class="space-y-6">
+                <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-amber-800 text-sm flex items-start space-x-3">
+                    <i class="fa-solid fa-pen-ruler text-xl text-amber-600 mt-0.5"></i>
+                    <div>
+                        <strong>ASK 4.2.1 Melakar Papan Cerita:</strong> Rancang kandungan blog anda di sini sebelum mula menaip kod HTML. Pelan ini membantu susunan elemen yang lebih teratur.
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-cyan-600 uppercase">
+                            <span>Kad 1</span>
+                            <i class="fa-solid fa-heading"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Tajuk & Banner</h4>
+                        <textarea id="sbTajuk" oninput="saveStoryboard()" class="w-full h-32 text-xs p-2.5 rounded-lg border border-slate-300 outline-none focus:ring-1 focus:ring-cyan-500 resize-none" placeholder="Cth: Blog Hobi Saya - Ahmad Syafiq"></textarea>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-cyan-600 uppercase">
+                            <span>Kad 2</span>
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Gambar Profil</h4>
+                        <textarea id="sbGambar" oninput="saveStoryboard()" class="w-full h-32 text-xs p-2.5 rounded-lg border border-slate-300 outline-none focus:ring-1 focus:ring-cyan-500 resize-none" placeholder="Cth: Menggunakan fail gambar-saya.jpg dari camera studio."></textarea>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-cyan-600 uppercase">
+                            <span>Kad 3</span>
+                            <i class="fa-solid fa-align-left"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Tentang Saya</h4>
+                        <textarea id="sbTentang" oninput="saveStoryboard()" class="w-full h-32 text-xs p-2.5 rounded-lg border border-slate-300 outline-none focus:ring-1 focus:ring-cyan-500 resize-none" placeholder="Cth: Saya murid Tingkatan 1 Gemilang yang minat dalam bidang pengaturcaraan."></textarea>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-cyan-600 uppercase">
+                            <span>Kad 4</span>
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Hobi & Menu</h4>
+                        <textarea id="sbHobi" oninput="saveStoryboard()" class="w-full h-32 text-xs p-2.5 rounded-lg border border-slate-300 outline-none focus:ring-1 focus:ring-cyan-500 resize-none" placeholder="Cth: Dropdown menu hobi: Membaca, Badminton, Coding."></textarea>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs font-bold text-cyan-600 uppercase">
+                            <span>Kad 5</span>
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Pautan & Komen</h4>
+                        <textarea id="sbKomen" oninput="saveStoryboard()" class="w-full h-32 text-xs p-2.5 rounded-lg border border-slate-300 outline-none focus:ring-1 focus:ring-cyan-500 resize-none" placeholder="Cth: Link ke laman KPM & borang textarea untuk pengunjung komen."></textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="switchBlogTab('builder')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow flex items-center space-x-2 text-sm">
+                        <span>Seterusnya: Tulis Kod Blog</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 2: FINAL BLOG BUILDER -->
+            <div id="blogBuilderSection" class="hidden space-y-6">
+                <!-- Requirements Checklist -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center justify-between">
+                        <span>Senarai Elemen HTML Wajib (Projek Final)</span>
+                        <span id="finalBlogScoreDisplay" class="text-cyan-600 font-extrabold text-base">Markah: 0/100</span>
+                    </h3>
+
+                    <div id="blogRequirementsList" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-medium text-slate-600">
+                        <!-- Checklist badges dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- Editor Workspace -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-[500px]">
+                    <!-- Editor -->
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden flex flex-col shadow-lg">
+                        <div class="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                            <span class="text-xs font-mono font-semibold text-emerald-400">BLOG_SAYA.HTML</span>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="loadTemplateIntoFinalBlog()" class="text-xs text-slate-400 hover:text-white underline">Muat Rangka Blog</button>
+                                <button onclick="evaluateFinalBlog()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1 rounded text-xs shadow">
+                                    NILAI BLOG SAYA
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="finalBlogTextarea" oninput="renderFinalBlogPreview()" spellcheck="false" class="w-full flex-1 bg-slate-900 text-emerald-400 font-mono text-sm p-4 outline-none resize-none code-scrollbar leading-relaxed" placeholder="Taip keseluruhan kod HTML blog anda di sini..."></textarea>
+                    </div>
+
+                    <!-- Live Preview Container -->
+                    <div class="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col shadow-lg">
+                        <div class="bg-slate-100 px-4 py-2 border-b border-slate-300 flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-700">PREVIEW BLOG ANDA</span>
+                            <span class="text-xs text-emerald-600 font-semibold" id="blogStatusTag">Auto-Updating</span>
+                        </div>
+                        <iframe id="finalBlogIframe" class="w-full flex-1 bg-white border-0" sandbox="allow-same-origin"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. PENCAPAIAN & RUBRIK (TEACHER VIEW INCLUDED) -->
+        <section id="view-achievements" class="app-view hidden p-4 sm:p-8 max-w-6xl mx-auto w-full space-y-8">
+            <div class="border-b border-slate-200 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center space-x-2 text-amber-600 text-xs font-bold uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span>Anugerah & Penilaian</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Pencapaian & Rubrik Projek</h1>
+                    <p class="text-slate-500 text-sm mt-1">Lihat koleksi lencana dan semak markah rubrik penilaian guru.</p>
+                </div>
+
+                <button onclick="toggleTeacherViewModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors shadow flex items-center space-x-2">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>Pandangan Guru</span>
+                </button>
+            </div>
+
+            <!-- Level Card -->
+            <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-5">
+                    <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-4xl font-black text-amber-100 flex-shrink-0">
+                        🏆
+                    </div>
+                    <div>
+                        <div class="text-xs uppercase font-extrabold text-amber-100 tracking-wider">Tahap Kemahiran Current</div>
+                        <h2 id="achievementsLevelTitle" class="text-2xl sm:text-3xl font-black">HTML Beginner</h2>
+                        <p id="achievementsStudentSubText" class="text-amber-100 text-sm mt-0.5">Pelajar: Syafiq (ASK Tingkatan 1)</p>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-64 bg-slate-900/30 p-4 rounded-2xl backdrop-blur border border-white/20">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span>Markah Projek Akhir</span>
+                        <span id="achievementsScoreText">0/100</span>
+                    </div>
+                    <div class="w-full bg-slate-900/40 h-3 rounded-full overflow-hidden">
+                        <div id="achievementsScoreBar" class="bg-amber-300 h-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges Grid -->
+            <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-award text-amber-500"></i>
+                    <span>Koleksi Lencana Pencapaian</span>
+                </h3>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4" id="badgesContainer">
+                    <!-- Badges dynamically rendered -->
+                </div>
+            </div>
+
+            <!-- Rubrik Projek Section -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center space-x-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-table-list text-cyan-600"></i>
+                    <span>Rubrik Penilaian Projek Blog Saya (ASK 4.2)</span>
+                </h3>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Kriteria Penilaian</th>
+                                <th class="p-3">Peratusan</th>
+                                <th class="p-3">Penerangan Tag HTML</th>
+                                <th class="p-3 text-right">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">1. Struktur HTML Asas</td>
+                                <td class="p-3 text-cyan-600 font-bold">20%</td>
+                                <td class="p-3 font-mono text-xs">&lt;html&gt;, &lt;head&gt;, &lt;title&gt;, &lt;body&gt;</td>
+                                <td id="rubricStatus1" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">2. Heading & Paragraph</td>
+                                <td class="p-3 text-cyan-600 font-bold">15%</td>
+                                <td class="p-3 font-mono text-xs">&lt;h1&gt;, &lt;h2&gt;, &lt;p&gt;</td>
+                                <td id="rubricStatus2" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">3. Memasukkan Imej Saya</td>
+                                <td class="p-3 text-cyan-600 font-bold">15%</td>
+                                <td class="p-3 font-mono text-xs">&lt;img src="gambar-saya.jpg"&gt;</td>
+                                <td id="rubricStatus3" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">4. Pautan Teks / Imej</td>
+                                <td class="p-3 text-cyan-600 font-bold">15%</td>
+                                <td class="p-3 font-mono text-xs">&lt;a href="..."&gt;</td>
+                                <td id="rubricStatus4" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">5. Pull-down Menu</td>
+                                <td class="p-3 text-cyan-600 font-bold">10%</td>
+                                <td class="p-3 font-mono text-xs">&lt;select&gt;, &lt;option&gt;</td>
+                                <td id="rubricStatus5" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">6. Ruang Komen</td>
+                                <td class="p-3 text-cyan-600 font-bold">10%</td>
+                                <td class="p-3 font-mono text-xs">&lt;form&gt;, &lt;textarea&gt;, &lt;input&gt;</td>
+                                <td id="rubricStatus6" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">7. Mengesan Ralat</td>
+                                <td class="p-3 text-cyan-600 font-bold">10%</td>
+                                <td class="p-3">Selesaikan Pemburu Ralat</td>
+                                <td id="rubricStatus7" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-800">8. Kekemasan Kod</td>
+                                <td class="p-3 text-cyan-600 font-bold">5%</td>
+                                <td class="p-3">Sintaks ditutup dengan betul</td>
+                                <td id="rubricStatus8" class="p-3 text-right font-bold text-slate-400">0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- TEACHER VIEW MODAL -->
+    <div id="teacherModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-xl rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">Pandangan Guru ASK</h3>
+                        <p class="text-xs text-slate-500">Ringkasan penilaian murid tempatan</p>
+                    </div>
+                </div>
+                <button onclick="toggleTeacherViewModal()" class="text-slate-400 hover:text-slate-700 text-lg p-2">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex justify-between text-slate-700 font-semibold">
+                        <span>Nama Murid:</span>
+                        <span id="teacherStudentNameDisplay" class="text-cyan-700 font-bold">-</span>
+                    </div>
+                    <div class="flex justify-between text-slate-700 font-semibold">
+                        <span>Misi Diselesaikan:</span>
+                        <span id="teacherMissionsDisplay" class="text-emerald-600 font-bold">0 / 10 Misi</span>
+                    </div>
+                    <div class="flex justify-between text-slate-700 font-semibold">
+                        <span>Markah Projek Blog:</span>
+                        <span id="teacherScoreDisplay" class="text-amber-600 font-bold">0 / 100</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-700 uppercase">Kemaskini Nama Murid:</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="teacherNameInput" class="flex-1 px-4 py-2 rounded-xl border border-slate-300 outline-none text-sm font-medium">
+                        <button onclick="saveStudentNameFromTeacher()" class="bg-slate-900 text-white font-bold px-4 py-2 rounded-xl text-xs">Simpan</button>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex justify-between items-center border-t border-slate-100">
+                    <button onclick="resetAllProgress()" class="text-rose-600 hover:text-rose-700 font-bold text-xs flex items-center space-x-1">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <span>Reset Kemajuan Pelajar</span>
+                    </button>
+                    <button onclick="toggleTeacherViewModal()" class="bg-slate-200 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM ALERT / MESSAGE MODAL (NO ALERT()) -->
+    <div id="customModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl transform transition-all scale-100">
+            <div class="flex items-center space-x-3">
+                <div id="modalIconContainer" class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-lg font-bold">
+                    <i id="modalIcon" class="fa-solid fa-info"></i>
+                </div>
+                <h3 id="modalTitle" class="text-lg font-bold text-slate-800">Maklumat</h3>
+            </div>
+
+            <p id="modalMessage" class="text-sm text-slate-600 leading-relaxed"></p>
+
+            <div class="pt-2 flex justify-end">
+                <button onclick="closeCustomModal()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-xl text-sm transition-colors">
+                    Faham
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        // Default App State
+        let appState = {
+            studentName: 'Pelajar ASK',
+            completedMissions: [],
+            cameraPhotoBase64: null,
+            storyboard: { tajuk: '', gambar: '', tentang: '', hobi: '', komen: '' },
+            playgroundCode: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Blog Saya</title>\n</head>\n<body>\n  <h1>Selamat Datang ke Blog Saya</h1>\n  <p>Ini adalah perenggan pertama saya menggunakan HTML!</p>\n</body>\n</html>`,
+            finalBlogCode: '',
+            errorHunterSolved: [],
+            badges: []
+        };
+
+        // Standard default sample image data URL for fallback profile picture
+        const DEFAULT_PHOTO_BASE64 = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><rect width="300" height="300" fill="%230284c7"/><circle cx="150" cy="110" r="50" fill="%23ffffff"/><path d="M60,250 C60,190 100,170 150,170 C200,170 240,190 240,250 Z" fill="%23ffffff"/><text x="150" y="280" font-family="sans-serif" font-size="16" font-weight="bold" fill="%23ffffff" text-anchor="middle">Foto Profil ASK</text></svg>`;
+
+        // Topic Data from Form 1 ASK Textbook Chapter 4.2
+        const TOPICS_DATA = [
+            {
+                id: '1',
+                title: 'A. Struktur Asas HTML',
+                desc: 'Setiap fail HTML mesti mempunyai struktur asas termasuk tag html, head, title dan body.',
+                tags: ['<html>', '<head>', '<title>', '<body>'],
+                code: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Tajuk Laman Laporan</title>\n</head>\n<body>\n  <h1>Kandungan Laman</h1>\n</body>\n</html>`,
+                hint: 'Tag <html> mengandungi keseluruhan elemen laman sesawang.'
+            },
+            {
+                id: '2',
+                title: 'B. Paragraph dan Headings',
+                desc: 'Tag <h1> hingga <h6> digunakan untuk tajuk, manakala tag <p> untuk perenggan teks.',
+                tags: ['<h1>', '<h2>', '<p>'],
+                code: `<h1>Tajuk Utama Blog</h1>\n<h2>Sub-tajuk Penting</h2>\n<p>Ini adalah perenggan teks yang menceritakan tentang latar belakang saya.</p>`,
+                hint: 'Tag <h1> ialah saiz heading paling besar manakala <h6> paling kecil.'
+            },
+            {
+                id: '3',
+                title: 'C. Banner & Header',
+                desc: 'Banner diletakkan di bahagian atas laman untuk menarik perhatian pelawat.',
+                tags: ['<h1>', '<div>', '<header>'],
+                code: `<div style="background:#0284c7; color:white; padding:20px; text-align:center; border-radius:10px;">\n  <h1>WELCOME TO MY BLOG</h1>\n  <p>Dunia Pengaturcaraan Tingkatan 1</p>\n</div>`,
+                hint: 'Banner biasanya mengandungi tajuk utama dan grafik menarik.'
+            },
+            {
+                id: '4',
+                title: 'D. Menu Navigasi',
+                desc: 'Menu memudahkan pelawat menyemak bahagian-bahagian di dalam blog anda.',
+                tags: ['<a href="#">'],
+                code: `<p>\n  <a href="#utama">Utama</a> | \n  <a href="#tentang">Tentang Saya</a> | \n  <a href="#komen">Ruang Komen</a>\n</p>`,
+                hint: 'Menu dibina menggunakan pautan teks.'
+            },
+            {
+                id: '5',
+                title: 'E. Pautan Teks (Hyperlink)',
+                desc: 'Menggunakan tag <a> dengan atribut href untuk menghubungkan ke laman sesawang lain.',
+                tags: ['<a href="...">'],
+                code: `<p>Layari laman rasmi <a href="https://www.moe.gov.my" target="_blank">KPM Di Sini</a>.</p>`,
+                hint: 'Atribut href menyimpan alamat web sasaran.'
+            },
+            {
+                id: '6',
+                title: 'F. Memasukkan Imej',
+                desc: 'Gunakan tag <img> dengan atribut src, alt, width dan height.',
+                tags: ['<img src="..." alt="...">'],
+                code: `<img src="gambar-saya.jpg" alt="Foto Profil Saya" width="200" style="border-radius:10px;">`,
+                hint: 'Tag <img> tidak memerlukan tag penutup sepadan.'
+            },
+            {
+                id: '7',
+                title: 'G. Pautan Imej',
+                desc: 'Imej boleh dijadikan pautan dengan meletakkan tag <img> di dalam tag <a>.',
+                tags: ['<a href="..."><img ...></a>'],
+                code: `<a href="https://www.google.com">\n  <img src="gambar-saya.jpg" width="150" alt="Klik Gambar">\n</a>`,
+                hint: 'Klik pada imej akan membawa pelawat ke pautan tersebut.'
+            },
+            {
+                id: '8',
+                title: 'H. Pull-Down Menu',
+                desc: 'Bina menu pilihan menggunakan tag <select> dan <option>.',
+                tags: ['<select>', '<option>'],
+                code: `<label>Pilih Hobi Anda:</label>\n<select>\n  <option>Membaca Buku</option>\n  <option>Main Badminton</option>\n  <option>Menaip Kod HTML</option>\n</select>`,
+                hint: 'Atribut option menentukan elemen di dalam kotak pilihan.'
+            },
+            {
+                id: '9',
+                title: 'I. Ruang Komen (Form)',
+                desc: 'Membolehkan pelawat meninggalkan maklum balas menggunakan <form>, <textarea> dan <input>.',
+                tags: ['<form>', '<textarea>', '<input>'],
+                code: `<form>\n  <label>Nama Pelawat:</label><br>\n  <input type="text" placeholder="Taip nama anda"><br><br>\n  <label>Komen Anda:</label><br>\n  <textarea rows="4" cols="30" placeholder="Tulis komen..."></textarea><br>\n  <input type="submit" value="Hantar Komen">\n</form>`,
+                hint: 'Tag textarea memberikan ruangan teks berbilang baris.'
+            },
+            {
+                id: '10',
+                title: 'J. Mengesan & Membaiki Ralat',
+                desc: 'Sentiasa pastikan tag pembuka dan penutup sepadan serta sintaks atribut ditulis betul.',
+                tags: ['Ralat Sintaks'],
+                code: `<!-- Ralat: Closing tag tidak sepadan -->\n<h1>Tajuk Utama</h2> <!-- ROSAK -->\n\n<!-- Pembetulan: -->\n<h1>Tajuk Utama</h1> <!-- BETUL -->`,
+                hint: 'Perhati ejaan atribut dan simbol penutup tag.'
+            }
+        ];
+
+        const MISSIONS_DATA = [
+            {
+                id: 1,
+                title: 'Misi 1: Struktur Blog',
+                instruction: 'Bina struktur asas HTML untuk blog anda mengandungi tag html, head, title ("Blog Saya"), dan body.',
+                required: ['html', 'head', 'title', 'body'],
+                initialCode: `<!DOCTYPE html>\n<!-- Bina struktur asas HTML di bawah -->\n`,
+                hint: 'Pastikan ada <html>, <head>, <title>, dan <body>.',
+                solution: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Blog Saya</title>\n</head>\n<body>\n  <h1>Selamat Datang</h1>\n</body>\n</html>`
+            },
+            {
+                id: 2,
+                title: 'Misi 2: Tajuk Blog Utama',
+                instruction: 'Cipta tajuk utama blog anda menggunakan tag heading <h1> dengan teks tajuk kegemaran anda.',
+                required: ['h1'],
+                initialCode: `<html>\n<body>\n  <!-- Tambahkan tag h1 di sini -->\n  \n</body>\n</html>`,
+                hint: 'Gunakan <h1>Tajuk Blog Saya</h1>',
+                solution: `<html>\n<body>\n  <h1>BLOG PERIBADI SAYA</h1>\n</body>\n</html>`
+            },
+            {
+                id: 3,
+                title: 'Misi 3: Perenggan Tentang Saya',
+                instruction: 'Tulis satu perenggan yang memperkenalkan diri anda menggunakan tag perenggan <p>.',
+                required: ['p'],
+                initialCode: `<html>\n<body>\n  <h1>Blog Saya</h1>\n  <!-- Tambahkan perenggan <p> tentang diri anda di sini -->\n  \n</body>\n</html>`,
+                hint: 'Gunakan <p>Nama saya Syafiq dan saya belajar di Tingkatan 1.</p>',
+                solution: `<html>\n<body>\n  <h1>Blog Saya</h1>\n  <p>Selamat datang! Saya murid Tingkatan 1 yang meminati bidang sains komputer.</p>\n</body>\n</html>`
+            },
+            {
+                id: 4,
+                title: 'Misi 4: Memasukkan Gambar Saya',
+                instruction: 'Gunakan gambar profil webcam anda dengan menaip tag <img src="gambar-saya.jpg">.',
+                required: ['img', 'src'],
+                initialCode: `<html>\n<body>\n  <h1>Profil Saya</h1>\n  <!-- Masukkan tag img di sini -->\n  \n</body>\n</html>`,
+                hint: 'Taip: <img src="gambar-saya.jpg" alt="Foto Saya" width="180">',
+                solution: `<html>\n<body>\n  <h1>Profil Saya</h1>\n  <img src="gambar-saya.jpg" alt="Foto Profil" width="200">\n</body>\n</html>`
+            },
+            {
+                id: 5,
+                title: 'Misi 5: Pautan Teks Hyperlink',
+                instruction: 'Tambahkan satu pautan teks ke laman sesawang yang anda gemari menggunakan tag <a> dan atribut href.',
+                required: ['a', 'href'],
+                initialCode: `<html>\n<body>\n  <h1>Pautan Kegemaran</h1>\n  <!-- Tambahkan pautan <a> di sini -->\n  \n</body>\n</html>`,
+                hint: 'Gunakan <a href="https://www.moe.gov.my">Laman KPM</a>',
+                solution: `<html>\n<body>\n  <h1>Pautan Kegemaran</h1>\n  <p>Layari <a href="https://www.moe.gov.my">Portal Rasmi KPM</a></p>\n</body>\n</html>`
+            },
+            {
+                id: 6,
+                title: 'Misi 6: Pautan Imej',
+                instruction: 'Jadikan gambar profil anda sebagai pautan yang boleh diklik menggunakan gabungan tag <a> dan <img>.',
+                required: ['a', 'href', 'img'],
+                initialCode: `<html>\n<body>\n  <h1>Gambar Pautan</h1>\n  <!-- Balut tag <img> di dalam tag <a> -->\n  \n</body>\n</html>`,
+                hint: 'Bentuknya: <a href="..."><img src="gambar-saya.jpg"></a>',
+                solution: `<html>\n<body>\n  <h1>Gambar Pautan</h1>\n  <a href="https://www.google.com">\n    <img src="gambar-saya.jpg" width="150">\n  </a>\n</body>\n</html>`
+            },
+            {
+                id: 7,
+                title: 'Misi 7: Pull-down Menu Hobi',
+                instruction: 'Bina menu pilihan pull-down untuk memilih hobi anda menggunakan tag <select> dan sekurang-kurangnya 2 tag <option>.',
+                required: ['select', 'option'],
+                initialCode: `<html>\n<body>\n  <h3>Pilih Hobi Anda:</h3>\n  <!-- Bina menu select & option di sini -->\n  \n</body>\n</html>`,
+                hint: 'Gunakan <select><option>Membaca</option><option>Coding</option></select>',
+                solution: `<html>\n<body>\n  <h3>Pilih Hobi Anda:</h3>\n  <select>\n    <option>Membaca Buku</option>\n    <option>Bermain Badminton</option>\n  </select>\n</body>\n</html>`
+            },
+            {
+                id: 8,
+                title: 'Misi 8: Ruang Komen Pelawat',
+                instruction: 'Tambahkan borang ruang komen pelawat mengandungi tag <form>, <textarea>, dan butang <input>.',
+                required: ['form', 'textarea', 'input'],
+                initialCode: `<html>\n<body>\n  <h2>Tinggalkan Komen</h2>\n  <!-- Tambahkan form, textarea dan input di sini -->\n  \n</body>\n</html>`,
+                hint: 'Pastikan ada <form>, <textarea>, dan <input type="submit">.',
+                solution: `<html>\n<body>\n  <h2>Tinggalkan Komen</h2>\n  <form>\n    <textarea placeholder="Tulis komen..."></textarea><br>\n    <input type="submit" value="Hantar">\n  </form>\n</body>\n</html>`
+            },
+            {
+                id: 9,
+                title: 'Misi 9: Mengesan & Membaiki Ralat',
+                instruction: 'Baiki kod HTML yang rosak di dalam editor di bawah. Cari penutup tag yang tidak sepadan!',
+                required: ['h1', 'p', 'img'],
+                initialCode: `<html>\n<body>\n  <h1>Blog Syafiq</h2> <!-- RALAT ATAS -->\n  <p>Selamat datang ke laman saya. <!-- RALAT PENUTUP -->\n  <img src="gambar-saya.jpg" <!-- RALAT SIMBOL > -->\n</body>\n</html>`,
+                hint: 'Semak penutup <h1>, tutup tag <p> dengan </p>, dan pastikan <img> ditutup dengan >.',
+                solution: `<html>\n<body>\n  <h1>Blog Syafiq</h1>\n  <p>Selamat datang ke laman saya.</p>\n  <img src="gambar-saya.jpg">\n</body>\n</html>`
+            },
+            {
+                id: 10,
+                title: 'Misi 10: Blog Master',
+                instruction: 'Bina blog ringkas yang lengkap menggabungkan <h1>, <p>, <img src="gambar-saya.jpg">, <select>, dan <form>!',
+                required: ['html', 'body', 'h1', 'p', 'img', 'select', 'form'],
+                initialCode: `<!DOCTYPE html>\n<html>\n<head>\n  <title>Blog Master</title>\n</head>\n<body>\n  <!-- Gabungkan semua elemen blog di sini -->\n  \n</body>\n</html>`,
+                hint: 'Gabungkan tajuk <h1>, perenggan <p>, gambar <img>, menu <select>, dan borang <form>.',
+                solution: `<!DOCTYPE html>\n<html>\n<head><title>Blog Master</title></head>\n<body>\n  <h1>Blog Master ASK</h1>\n  <p>Ini blog lengkap saya.</p>\n  <img src="gambar-saya.jpg" width="150"><br>\n  <select><option>Hobi 1</option></select>\n  <form><textarea></textarea><br><input type="submit"></form>\n</body>\n</html>`
+            }
+        ];
+
+        const ERROR_CHALLENGES = [
+            {
+                id: 1,
+                title: 'Cabaran Ralat 1: Tag Penutup Tidak Sepadan',
+                desc: 'Pelajar menaip <h1> tetapi menutupnya dengan </h2>.',
+                brokenCode: `<h1>Selamat Datang Ke Blog Saya</h2>`,
+                fixedCode: `<h1>Selamat Datang Ke Blog Saya</h1>`,
+                hint1: 'Semak tag pembuka dan tag penutup.',
+                hint2: 'Tag <h1> perlu ditutup sepadan dengan </h1>.'
+            },
+            {
+                id: 2,
+                title: 'Cabaran Ralat 2: Atribut Src Imej Hilang Quote',
+                desc: 'Atribut src tidak mempunyai tanda petik atau simbol penutup > yang sempurna.',
+                brokenCode: `<img src=gambar-saya.jpg alt="Foto Saya"`,
+                fixedCode: `<img src="gambar-saya.jpg" alt="Foto Saya">`,
+                hint1: 'Pastikan nilai src diapit tanda petik "..."',
+                hint2: 'Jangan lupa simbol > di penghujung tag imej.'
+            },
+            {
+                id: 3,
+                title: 'Cabaran Ralat 3: Pautan Teks Tanpa Atribut Href',
+                desc: 'Tag <a> digunakan tetapi lupa menulis atribut href.',
+                brokenCode: `<a link="https://www.moe.gov.my">Laman KPM</a>`,
+                fixedCode: `<a href="https://www.moe.gov.my">Laman KPM</a>`,
+                hint1: 'Tag <a> menggunakan atribut href, bukannya link.',
+                hint2: 'Tukar link="..." kepada href="..."'
+            }
+        ];
+
+        // Current Active Mission Index (0 - 9)
+        let currentMissionIndex = 0;
+
+        window.onload = function() {
+            loadFromLocalStorage();
+            renderTopics();
+            renderMissionsPills();
+            loadMission(0);
+            renderErrorHunterChallenges();
+            renderBadges();
+            updateProgressIndicators();
+            initWebcamControls();
+
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            // Set default Playground content
+            document.getElementById('playgroundTextarea').value = appState.playgroundCode;
+            runPlaygroundCode();
+
+            // Render Final Blog initial preview
+            if (!appState.finalBlogCode) {
+                appState.finalBlogCode = getDefaultBlogTemplate();
+            }
+            document.getElementById('finalBlogTextarea').value = appState.finalBlogCode;
+            renderFinalBlogPreview();
+        };
+
+        // Local Storage Sync Functions
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('html_lab_state', JSON.stringify(appState));
+            } catch (e) {
+                console.warn('LocalStorage constraint:', e);
+            }
+            updateProgressIndicators();
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('html_lab_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    appState = { ...appState, ...parsed };
+                }
+            } catch (e) {
+                console.warn('Unable to parse saved state:', e);
+            }
+
+            // Sync student name
+            document.getElementById('sidebarStudentName').innerText = appState.studentName || 'Pelajar ASK';
+            document.getElementById('homeStudentNameInput').value = appState.studentName || '';
+
+            // Sync storyboard inputs
+            if (appState.storyboard) {
+                document.getElementById('sbTajuk').value = appState.storyboard.tajuk || '';
+                document.getElementById('sbGambar').value = appState.storyboard.gambar || '';
+                document.getElementById('sbTentang').value = appState.storyboard.tentang || '';
+                document.getElementById('sbHobi').value = appState.storyboard.hobi || '';
+                document.getElementById('sbKomen').value = appState.storyboard.komen || '';
+            }
+        }
+
+        // Navigation Engine
+        function navigateTo(viewId) {
+            // Hide all views
+            const views = document.querySelectorAll('.app-view');
+            views.forEach(v => v.classList.add('hidden'));
+
+            // Show selected view
+            const target = document.getElementById('view-' + viewId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Nav item styles
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('bg-cyan-600', 'text-white', 'shadow-md');
+                item.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200');
+            });
+
+            const activeNav = document.getElementById('nav-' + viewId);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-slate-200');
+                activeNav.classList.add('bg-cyan-600', 'text-white', 'shadow-md');
+            }
+
+            // Close mobile menu
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Student Profile Handlers
+        function saveStudentNameFromHome() {
+            const input = document.getElementById('homeStudentNameInput').value.trim();
+            if (input) {
+                appState.studentName = input;
+                saveToLocalStorage();
+                document.getElementById('sidebarStudentName').innerText = input;
+                showCustomModal('Profil Dikemaskini', `Selamat datang, ${input}! Nama anda telah disimpan.`, 'fa-circle-check', 'text-emerald-500');
+            }
+        }
+
+        function changeStudentName() {
+            const newName = prompt('Masukkan nama murid anda:', appState.studentName);
+            if (newName && newName.trim()) {
+                appState.studentName = newName.trim();
+                saveToLocalStorage();
+                document.getElementById('sidebarStudentName').innerText = appState.studentName;
+                document.getElementById('homeStudentNameInput').value = appState.studentName;
+            }
+        }
+
+        function renderTopics() {
+            const container = document.getElementById('topicsContainer');
+            container.innerHTML = '';
+
+            TOPICS_DATA.forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 hover:border-cyan-300 transition-all flex flex-col justify-between';
+                
+                const tagsHtml = topic.tags.map(t => `<span class="bg-cyan-50 text-cyan-700 font-mono text-xs px-2.5 py-1 rounded-md font-semibold border border-cyan-200">${escapeHtml(t)}</span>`).join(' ');
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-slate-800 text-lg">${topic.title}</h3>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">${topic.desc}</p>
+                        <div class="flex flex-wrap gap-1.5 pt-1">${tagsHtml}</div>
+                        
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-800 text-xs font-mono text-emerald-400 overflow-x-auto code-scrollbar">
+                            <pre>${escapeHtml(topic.code)}</pre>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+                        <span class="text-xs text-slate-400 italic">ASK Tingkatan 1</span>
+                        <button onclick="tryTopicInPlayground('${topic.id}')" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-4 py-2 rounded-xl text-xs transition-colors flex items-center space-x-1.5">
+                            <span>Cuba Sekarang</span>
+                            <i class="fa-solid fa-code text-cyan-400"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function tryTopicInPlayground(topicId) {
+            const topic = TOPICS_DATA.find(t => t.id === topicId);
+            if (topic) {
+                appState.playgroundCode = `<!DOCTYPE html>\n<html>\n<head>\n  <title>${topic.title}</title>\n</head>\n<body>\n\n${topic.code}\n\n</body>\n</html>`;
+                document.getElementById('playgroundTextarea').value = appState.playgroundCode;
+                navigateTo('playground');
+                runPlaygroundCode();
+            }
+        }
+
+        function sanitizeAndInjectImage(htmlString) {
+            // Replace "gambar-saya.jpg" or 'gambar-saya.jpg' with the user's base64 captured photo or default fallback
+            const photoSrc = appState.cameraPhotoBase64 || DEFAULT_PHOTO_BASE64;
+            return htmlString.replace(/gambar-saya\.jpg/gi, photoSrc);
+        }
+
+        function runPlaygroundCode() {
+            const rawCode = document.getElementById('playgroundTextarea').value;
+            appState.playgroundCode = rawCode;
+            saveToLocalStorage();
+
+            const iframe = document.getElementById('playgroundIframe');
+            const processedCode = sanitizeAndInjectImage(rawCode);
+
+            // Render inside sandboxed doc
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(processedCode);
+            doc.close();
+
+            document.getElementById('playgroundStatusText').innerText = '✓ Kod berjaya dijalankan';
+            document.getElementById('playgroundStatusText').className = 'text-emerald-400 font-bold';
+        }
+
+        function resetPlaygroundCode() {
+            document.getElementById('playgroundTextarea').value = `<!DOCTYPE html>\n<html>\n<head>\n  <title>Blog Saya</title>\n</head>\n<body>\n  <h1>Selamat Datang ke Blog Saya</h1>\n  <p>Ini adalah perenggan pertama saya menggunakan HTML!</p>\n</body>\n</html>`;
+            runPlaygroundCode();
+        }
+
+        function clearPlaygroundCode() {
+            document.getElementById('playgroundTextarea').value = '';
+            runPlaygroundCode();
+        }
+
+        function showPlaygroundHint() {
+            showCustomModal('Petunjuk Playground', 'Taip sebarang tag HTML seperti <h1>, <p>, atau <img src="gambar-saya.jpg"> kemudian tekan ▶ RUN untuk melihat output secara maya.', 'fa-lightbulb', 'text-amber-500');
+        }
+
+        let webcamStream = null;
+
+        function initWebcamControls() {
+            // Check browser getUserMedia support
+        }
+
+        async function startWebcam() {
+            const video = document.getElementById('webcamVideo');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const startBtn = document.getElementById('startCamBtn');
+            const snapBtn = document.getElementById('snapCamBtn');
+
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+                video.srcObject = webcamStream;
+                placeholder.classList.add('hidden');
+                snapBtn.disabled = false;
+                startBtn.classList.add('hidden');
+            } catch (err) {
+                console.warn('Camera error:', err);
+                showCustomModal('Akses Kamera', 'Kamera tidak dapat diakses atau dihalang oleh penyemak imbas. Gambar contoh automatik telah disediakan untuk latihan.', 'fa-camera-retro', 'text-amber-500');
+                
+                // Fallback to sample photo if webcam denied
+                appState.cameraPhotoBase64 = DEFAULT_PHOTO_BASE64;
+                saveToLocalStorage();
+            }
+        }
+
+        function takeSnapshot() {
+            const video = document.getElementById('webcamVideo');
+            const canvas = document.getElementById('webcamCanvas');
+            const imgResult = document.getElementById('photoCapturedResult');
+            const actions = document.getElementById('capturedActions');
+            const downloadLink = document.getElementById('downloadPhotoLink');
+
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const base64 = canvas.toDataURL('image/jpeg');
+            appState.cameraPhotoBase64 = base64;
+            saveToLocalStorage();
+
+            imgResult.src = base64;
+            imgResult.classList.remove('hidden');
+            video.classList.add('hidden');
+
+            actions.classList.remove('hidden');
+            downloadLink.href = base64;
+
+            // Stop webcam stream track to save battery
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+            }
+
+            unlockBadge('digital-photographer');
+            showCustomModal('Gambar Diambil!', 'Gambar anda berjaya ditangkap! Anda kini boleh memuat turun fail "gambar-saya.jpg".', 'fa-circle-check', 'text-emerald-500');
+        }
+
+        function retakeSnapshot() {
+            const video = document.getElementById('webcamVideo');
+            const imgResult = document.getElementById('photoCapturedResult');
+            const actions = document.getElementById('capturedActions');
+            const startBtn = document.getElementById('startCamBtn');
+
+            imgResult.classList.add('hidden');
+            video.classList.remove('hidden');
+            actions.classList.add('hidden');
+            startBtn.classList.remove('hidden');
+            document.getElementById('snapCamBtn').disabled = true;
+
+            startWebcam();
+        }
+
+        function useSnapshotInLab() {
+            showCustomModal('Gambar Sedia!', 'Gambar profil anda sedia digunakan di dalam HTML Lab. Gunakan tag <img src="gambar-saya.jpg"> di mana-mana editor.', 'fa-check-circle', 'text-cyan-500');
+            navigateTo('playground');
+        }
+
+        function renderMissionsPills() {
+            const container = document.getElementById('missionSelectorContainer');
+            container.innerHTML = '';
+
+            MISSIONS_DATA.forEach((m, idx) => {
+                const btn = document.createElement('button');
+                const isDone = appState.completedMissions.includes(m.id);
+                
+                btn.className = `px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                    idx === currentMissionIndex 
+                    ? 'bg-cyan-600 text-white shadow-md' 
+                    : isDone 
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
+                    : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                }`;
+
+                btn.innerHTML = `
+                    <span>M${m.id}</span>
+                    ${isDone ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                `;
+
+                btn.onclick = () => loadMission(idx);
+                container.appendChild(btn);
+            });
+        }
+
+        function loadMission(index) {
+            currentMissionIndex = index;
+            const m = MISSIONS_DATA[index];
+
+            document.getElementById('missionBadgeTag').innerText = `MISI ${m.id} DARI 10`;
+            document.getElementById('missionTitleText').innerText = m.title;
+            document.getElementById('missionInstructionText').innerText = m.instruction;
+
+            const reqBox = document.getElementById('missionRequirementsTagBox');
+            reqBox.innerHTML = m.required.map(r => `<span class="bg-slate-200 text-slate-800 text-xs font-mono px-2 py-0.5 rounded border border-slate-300">&lt;${r}&gt;</span>`).join(' ');
+
+            document.getElementById('missionCodeTextarea').value = m.initialCode;
+            document.getElementById('missionFeedbackText').innerHTML = `<i class="fa-solid fa-circle-info text-cyan-400"></i><span>Taip kod di atas dan klik "SEMAK KOD" untuk menguji.</span>`;
+
+            renderMissionsPills();
+            renderMissionIframe();
+        }
+
+        function renderMissionIframe() {
+            const code = document.getElementById('missionCodeTextarea').value;
+            const iframe = document.getElementById('missionIframe');
+            const processed = sanitizeAndInjectImage(code);
+
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(processed);
+            doc.close();
+        }
+
+        document.getElementById('missionCodeTextarea').addEventListener('input', renderMissionIframe);
+
+        function insertMissionTemplate() {
+            const m = MISSIONS_DATA[currentMissionIndex];
+            document.getElementById('missionCodeTextarea').value = m.initialCode;
+            renderMissionIframe();
+        }
+
+        function checkCurrentMission() {
+            const m = MISSIONS_DATA[currentMissionIndex];
+            const code = document.getElementById('missionCodeTextarea').value.toLowerCase();
+            
+            // Intelligent HTML tag detector regex
+            let missingTags = [];
+            m.required.forEach(tag => {
+                const tagRegex = new RegExp(`<${tag}[\\s>]`, 'i');
+                if (!tagRegex.test(code)) {
+                    missingTags.push(`<${tag}>`);
+                }
+            });
+
+            const feedback = document.getElementById('missionFeedbackText');
+
+            if (missingTags.length === 0) {
+                feedback.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i> TAHNIAH! Misi ${m.id} Berjaya Diselesaikan!</span>`;
+                
+                if (!appState.completedMissions.includes(m.id)) {
+                    appState.completedMissions.push(m.id);
+                    saveToLocalStorage();
+                }
+
+                renderMissionsPills();
+                checkBadgeMilestones();
+
+                showCustomModal(`Misi ${m.id} Selesai!`, `Syabas, anda telah menguasai konsep ${m.title}! Misi seterusnya telah dibuka.`, 'fa-trophy', 'text-amber-500');
+            } else {
+                feedback.innerHTML = `<span class="text-rose-400 font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Kod belum lengkap. Tag dikehendaki yang hilang: ${missingTags.join(', ')}</span>`;
+            }
+        }
+
+        function getMissionHint() {
+            const m = MISSIONS_DATA[currentMissionIndex];
+            showCustomModal('Petunjuk Misi', m.hint, 'fa-lightbulb', 'text-amber-500');
+        }
+
+        function revealMissionAnswer() {
+            const m = MISSIONS_DATA[currentMissionIndex];
+            showCustomModal('Jawapan Misi', `Contoh Kod Lengkap:<br><pre class="bg-slate-900 text-emerald-400 font-mono text-xs p-3 rounded mt-2 border border-slate-700">${escapeHtml(m.solution)}</pre>`, 'fa-key', 'text-cyan-500');
+        }
+
+        function renderErrorHunterChallenges() {
+            const container = document.getElementById('errorChallengesContainer');
+            container.innerHTML = '';
+
+            ERROR_CHALLENGES.forEach(ch => {
+                const isSolved = appState.errorHunterSolved.includes(ch.id);
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-2xl border p-6 shadow-sm space-y-4 ${isSolved ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200'}`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 font-bold text-xs flex items-center justify-center">
+                                <i class="fa-solid fa-bug"></i>
+                            </span>
+                            <h3 class="font-bold text-slate-800 text-base">${ch.title}</h3>
+                        </div>
+                        ${isSolved ? '<span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-check mr-1"></i> Dibaik pulih</span>' : '<span class="bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full">Ada Ralat</span>'}
+                    </div>
+
+                    <p class="text-sm text-slate-600">${ch.desc}</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-500 uppercase">Kod Rosak:</label>
+                            <textarea id="errCodeInput_${ch.id}" class="w-full h-24 bg-slate-900 text-rose-400 font-mono text-xs p-3 rounded-xl border border-slate-800 outline-none leading-relaxed">${escapeHtml(ch.brokenCode)}</textarea>
+                        </div>
+
+                        <div class="space-y-2 flex flex-col justify-between">
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-500 uppercase">Status Pembetulan:</label>
+                                <div id="errStatus_${ch.id}" class="p-3 bg-slate-100 rounded-xl text-xs font-mono text-slate-600 min-h-[60px] flex items-center">
+                                    Sedia untuk dikesan.
+                                </div>
+                            </div>
+
+                            <div class="flex space-x-2">
+                                <button onclick="checkErrorChallenge(${ch.id})" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 rounded-xl text-xs transition-colors shadow">
+                                    SEMAK RALAT
+                                </button>
+                                <button onclick="showErrorHint(${ch.id})" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-3 py-2 rounded-xl text-xs transition-colors">
+                                    💡 Petunjuk
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function checkErrorChallenge(id) {
+            const ch = ERROR_CHALLENGES.find(c => c.id === id);
+            const userTyped = document.getElementById(`errCodeInput_${id}`).value.trim();
+            const statusDiv = document.getElementById(`errStatus_${id}`);
+
+            // Normalize spaces for check
+            const normUser = userTyped.replace(/\s+/g, ' ').toLowerCase();
+            const normFixed = ch.fixedCode.replace(/\s+/g, ' ').toLowerCase();
+
+            if (normUser === normFixed || normUser.includes(normFixed)) {
+                statusDiv.className = 'p-3 bg-emerald-100 text-emerald-800 font-bold rounded-xl text-xs font-mono border border-emerald-300';
+                statusDiv.innerHTML = '✓ Tahniah! Ralat sintaks berjaya dibaiki.';
+
+                if (!appState.errorHunterSolved.includes(id)) {
+                    appState.errorHunterSolved.push(id);
+                    saveToLocalStorage();
+                    renderErrorHunterChallenges();
+                }
+
+                if (appState.errorHunterSolved.length === ERROR_CHALLENGES.length) {
+                    unlockBadge('error-hunter');
+                }
+            } else {
+                statusDiv.className = 'p-3 bg-rose-50 text-rose-700 font-semibold rounded-xl text-xs font-mono border border-rose-200';
+                statusDiv.innerHTML = `❌ Ralat belum dibaiki sepenuhnya.<br>Petunjuk: ${ch.hint1}`;
+            }
+        }
+
+        function showErrorHint(id) {
+            const ch = ERROR_CHALLENGES.find(c => c.id === id);
+            showCustomModal('Petunjuk Pemburu Ralat', `${ch.hint1}<br><br>${ch.hint2}`, 'fa-lightbulb', 'text-amber-500');
+        }
+
+        function switchBlogTab(tab) {
+            const sbSection = document.getElementById('storyboardSection');
+            const bbSection = document.getElementById('blogBuilderSection');
+            const sbBtn = document.getElementById('tabStoryboardBtn');
+            const bbBtn = document.getElementById('tabBlogBuilderBtn');
+
+            if (tab === 'storyboard') {
+                sbSection.classList.remove('hidden');
+                bbSection.classList.add('hidden');
+                sbBtn.className = 'px-4 py-2 rounded-lg text-sm font-bold text-slate-700 bg-white shadow transition-all';
+                bbBtn.className = 'px-4 py-2 rounded-lg text-sm font-bold text-slate-600 hover:text-slate-900 transition-all';
+            } else {
+                sbSection.classList.add('hidden');
+                bbSection.classList.remove('hidden');
+                bbBtn.className = 'px-4 py-2 rounded-lg text-sm font-bold text-slate-700 bg-white shadow transition-all';
+                sbBtn.className = 'px-4 py-2 rounded-lg text-sm font-bold text-slate-600 hover:text-slate-900 transition-all';
+                renderFinalBlogPreview();
+            }
+        }
+
+        function saveStoryboard() {
+            appState.storyboard = {
+                tajuk: document.getElementById('sbTajuk').value,
+                gambar: document.getElementById('sbGambar').value,
+                tentang: document.getElementById('sbTentang').value,
+                hobi: document.getElementById('sbHobi').value,
+                komen: document.getElementById('sbKomen').value
+            };
+            saveToLocalStorage();
+        }
+
+        function getDefaultBlogTemplate() {
+            return `<!DOCTYPE html>
+<html>
+<head>
+  <title>Blog Hobi Saya</title>
+</head>
+<body style="font-family: sans-serif; padding: 20px; background-color: #f0f9ff;">
+
+  <!-- BANNER BLOG -->
+  <div style="background: #0284c7; color: white; padding: 20px; text-align: center; border-radius: 12px;">
+    <h1>BLOG SAYA</h1>
+    <p>Diisikan oleh ${appState.studentName || 'Pelajar ASK'}</p>
+  </div>
+
+  <!-- GAMBAR PROFIL & TENTANG SAYA -->
+  <h2>Tentang Saya</h2>
+  <img src="gambar-saya.jpg" alt="Foto Profil" width="180" style="border-radius: 10px;">
+  <p>Selamat datang ke blog saya! Saya seorang murid Tingkatan 1 yang meminati teknologi.</p>
+
+  <!-- PULL-DOWN MENU HOBI -->
+  <h3>Pilihan Hobi Saya</h3>
+  <select>
+    <option>Membaca Buku Sains</option>
+    <option>Bermain Badminton</option>
+    <option>Bina Laman Web HTML</option>
+  </select>
+
+  <!-- PAUTAN TEKS -->
+  <h3>Pautan Kegemaran</h3>
+  <p>Layari <a href="https://www.moe.gov.my" target="_blank">Portal KPM</a> untuk berita pendidikan.</p>
+
+  <!-- RUANG KOMEN -->
+  <h3>Ruang Komen Pelawat</h3>
+  <form>
+    <label>Nama Anda:</label><br>
+    <input type="text" placeholder="Taip nama..."><br><br>
+    <label>Mesej Komen:</label><br>
+    <textarea rows="4" cols="35" placeholder="Tulis komen..."></textarea><br><br>
+    <input type="submit" value="Hantar Komen">
+  </form>
+
+</body>
+</html>`;
+        }
+
+        function loadTemplateIntoFinalBlog() {
+            document.getElementById('finalBlogTextarea').value = getDefaultBlogTemplate();
+            renderFinalBlogPreview();
+        }
+
+        function renderFinalBlogPreview() {
+            const raw = document.getElementById('finalBlogTextarea').value;
+            appState.finalBlogCode = raw;
+            saveToLocalStorage();
+
+            const iframe = document.getElementById('finalBlogIframe');
+            const processed = sanitizeAndInjectImage(raw);
+
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(processed);
+            doc.close();
+
+            updateRequirementsChecklist(raw);
+        }
+
+        function updateRequirementsChecklist(code) {
+            const codeLower = code.toLowerCase();
+
+            const checks = [
+                { name: 'Struktur Asas', weight: 20, test: ['html', 'head', 'title', 'body'] },
+                { name: 'Heading (h1/h2)', weight: 15, test: ['h1'] },
+                { name: 'Perenggan (p)', weight: 15, test: ['p'] },
+                { name: 'Gambar Profil', weight: 15, test: ['img', 'src'] },
+                { name: 'Pautan (a href)', weight: 10, test: ['a', 'href'] },
+                { name: 'Pull-down Menu', weight: 10, test: ['select', 'option'] },
+                { name: 'Ruang Komen', weight: 10, test: ['form', 'textarea', 'input'] },
+                { name: 'Kekemasan Tag', weight: 5, test: ['</html>'] }
+            ];
+
+            let score = 0;
+            const container = document.getElementById('blogRequirementsList');
+            container.innerHTML = '';
+
+            checks.forEach((item, index) => {
+                let passed = item.test.every(t => codeLower.includes(t));
+                let itemScore = passed ? item.weight : 0;
+                score += itemScore;
+
+                const tag = document.createElement('div');
+                tag.className = `p-2 rounded-lg border flex items-center justify-between ${passed ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-100 border-slate-200 text-slate-400'}`;
+                tag.innerHTML = `
+                    <span>${item.name} (${item.weight}%)</span>
+                    <i class="fa-solid ${passed ? 'fa-check text-emerald-600' : 'fa-xmark text-slate-400'}"></i>
+                `;
+                container.appendChild(tag);
+
+                // Sync Rubric Table
+                const rubEl = document.getElementById(`rubricStatus${index + 1}`);
+                if (rubEl) {
+                    rubEl.innerText = `${itemScore}% / ${item.weight}%`;
+                    rubEl.className = `p-3 text-right font-bold ${passed ? 'text-emerald-600' : 'text-slate-400'}`;
+                }
+            });
+
+            document.getElementById('finalBlogScoreDisplay').innerText = `Markah: ${score}/100`;
+            document.getElementById('achievementsScoreText').innerText = `${score}/100`;
+            document.getElementById('achievementsScoreBar').style.width = `${score}%`;
+
+            if (score >= 90) {
+                unlockBadge('html-blogger');
+            }
+        }
+
+        function evaluateFinalBlog() {
+            renderFinalBlogPreview();
+            const scoreText = document.getElementById('finalBlogScoreDisplay').innerText;
+            showCustomModal('Penilaian Projek Blog', `Hasil penilaian semula kod blog anda:<br><br><strong class="text-2xl text-emerald-600 font-black">${scoreText}</strong><br><br>Sila semak senarai elemen wajib untuk memenuhi markah penuh 100%!`, 'fa-square-poll-vertical', 'text-cyan-600');
+        }
+
+        const ALL_BADGES = [
+            { id: 'tag-explorer', title: 'Tag Explorer', desc: 'Menyelesaikan 3 misi asas HTML.', icon: '🏅' },
+            { id: 'digital-photographer', title: 'Digital Photographer', desc: 'Menggunakan foto webcam sendiri.', icon: '📷' },
+            { id: 'link-master', title: 'Link Master', desc: 'Mencipta pautan teks dan imej.', icon: '🔗' },
+            { id: 'menu-builder', title: 'Menu Builder', desc: 'Membina menu pilihan pull-down.', icon: '🧩' },
+            { id: 'error-hunter', title: 'Error Hunter', desc: 'Membaiki ralat sintaks HTML.', icon: '🔎' },
+            { id: 'html-blogger', title: 'HTML Blogger', desc: 'Menyiapkan projek akhir blog.', icon: '🏆' }
+        ];
+
+        function checkBadgeMilestones() {
+            if (appState.completedMissions.length >= 3) unlockBadge('tag-explorer');
+            if (appState.completedMissions.includes(5) || appState.completedMissions.includes(6)) unlockBadge('link-master');
+            if (appState.completedMissions.includes(7)) unlockBadge('menu-builder');
+        }
+
+        function unlockBadge(badgeId) {
+            if (!appState.badges.includes(badgeId)) {
+                appState.badges.push(badgeId);
+                saveToLocalStorage();
+                renderBadges();
+            }
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badgesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            ALL_BADGES.forEach(b => {
+                const unlocked = appState.badges.includes(b.id);
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border text-center space-y-2 flex flex-col items-center justify-center transition-all ${
+                    unlocked 
+                    ? 'bg-gradient-to-b from-amber-50 to-orange-50 border-amber-300 shadow-md' 
+                    : 'bg-slate-100 border-slate-200 opacity-50 grayscale'
+                }`;
+
+                card.innerHTML = `
+                    <div class="text-3xl">${b.icon}</div>
+                    <div class="font-bold text-slate-800 text-xs">${b.title}</div>
+                    <div class="text-[10px] text-slate-500 leading-tight">${b.desc}</div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function updateProgressIndicators() {
+            const count = appState.completedMissions.length;
+            const percentage = Math.round((count / 10) * 100);
+
+            // Mission counter text
+            document.getElementById('missionProgressText').innerText = `${count}/10 Misi`;
+            document.getElementById('missionProgressBar').style.width = `${percentage}%`;
+            document.getElementById('missionBadgeCount').innerText = `${count}/10`;
+
+            // Student Level Title
+            let levelTitle = 'HTML Beginner';
+            if (percentage >= 31 && percentage <= 60) levelTitle = 'HTML Explorer';
+            else if (percentage >= 61 && percentage <= 90) levelTitle = 'HTML Creator';
+            else if (percentage >= 91) levelTitle = 'HTML Master Blogger';
+
+            document.getElementById('sidebarLevel').innerText = levelTitle;
+            document.getElementById('achievementsLevelTitle').innerText = levelTitle;
+            document.getElementById('achievementsStudentSubText').innerText = `Pelajar: ${appState.studentName} (ASK Tingkatan 1)`;
+        }
+
+        // Teacher Modal Logic
+        function toggleTeacherViewModal() {
+            const modal = document.getElementById('teacherModal');
+            modal.classList.toggle('hidden');
+
+            document.getElementById('teacherStudentNameDisplay').innerText = appState.studentName;
+            document.getElementById('teacherMissionsDisplay').innerText = `${appState.completedMissions.length} / 10 Misi`;
+            document.getElementById('teacherNameInput').value = appState.studentName;
+
+            const scoreMatch = document.getElementById('finalBlogScoreDisplay').innerText.match(/\d+/);
+            const score = scoreMatch ? scoreMatch[0] : '0';
+            document.getElementById('teacherScoreDisplay').innerText = `${score} / 100`;
+        }
+
+        function saveStudentNameFromTeacher() {
+            const input = document.getElementById('teacherNameInput').value.trim();
+            if (input) {
+                appState.studentName = input;
+                saveToLocalStorage();
+                document.getElementById('sidebarStudentName').innerText = input;
+                document.getElementById('teacherStudentNameDisplay').innerText = input;
+                showCustomModal('Profil Guru', `Nama murid ditukar kepada: ${input}`, 'fa-check', 'text-emerald-500');
+            }
+        }
+
+        function resetAllProgress() {
+            if (confirm('Adakah anda pasti untuk mendaftar semula kemajuan pelajar ini? Semua lencana dan misi akan diset semula.')) {
+                localStorage.removeItem('html_lab_state');
+                location.reload();
+            }
+        }
+
+        // Custom Modal Function (No alert)
+        function showCustomModal(title, message, iconClass = 'fa-info', iconColorClass = 'text-cyan-600') {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerHTML = message;
+
+            const iconContainer = document.getElementById('modalIconContainer');
+            const icon = document.getElementById('modalIcon');
+
+            icon.className = `fa-solid ${iconClass}`;
+            iconContainer.className = `w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-lg font-bold ${iconColorClass}`;
+
+            document.getElementById('customModal').classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        // Utility: HTML Escaper
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
